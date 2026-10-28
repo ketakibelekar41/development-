@@ -1,0 +1,26 @@
+{
+  "name": "atelier-3d",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "models:export": "node tools/export-models.mjs",
+    "models:optimize": "for f in public/models/*.glb; do gltf-transform optimize $f $f --compress meshopt --texture-compress webp --texture-size 1024 --simplify false --join false --instance false --palette false --flatten false; done"
+  },
+  "dependencies": {
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "three": "^0.186.1"
+  },
+  "devDependencies": {
+    "@gltf-transform/cli": "^4.5.1",
+    "@tailwindcss/vite": "^4.3.3",
+    "@vitejs/plugin-react": "^6.1.2",
+    "sharp": "^0.35.5",
+    "tailwindcss": "^4.3.3",
+    "vite": "^8.3.5"
+  }
+}

@@ -1,0 +1,42 @@
+@import "tailwindcss";
+
+@theme {
+  --font-serif: "Cormorant Garamond", "Times New Roman", serif;
+  --font-sans: "Inter", system-ui, sans-serif;
+  --color-paper: #ece6d9;
+  --color-ink: #1d1a16;
+  --color-clay: #c4572e;
+}
+
+html {
+  background: var(--color-paper);
+  scroll-behavior: auto; /* scroll is smoothed in JS (ScrollStore), not by the browser */
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  background: var(--color-paper);
+  color: var(--color-ink);
+  -webkit-font-smoothing: antialiased;
+  overscroll-behavior-y: none;
+}
+
+/* The foreground colour of the HUD is driven per-frame from the scroll progress
+   (dark ink on the paper sketch -> warm ivory on the lit interior). */
+.hud {
+  --fg: 29 26 22;
+  color: rgb(var(--fg));
+}
+.hud-border {
+  border-color: rgb(var(--fg) / 0.35);
+}
+
+@keyframes draw {
+  from { stroke-dashoffset: 1; }
+  to { stroke-dashoffset: 0; }
+}
+@keyframes hint {
+  0%, 100% { transform: scaleY(0.2); transform-origin: top; opacity: 0.5; }
+  50% { transform: scaleY(1); transform-origin: top; opacity: 1; }
+}
