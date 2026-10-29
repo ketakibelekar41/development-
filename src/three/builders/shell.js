@@ -38,10 +38,10 @@ export function buildShell(lib) {
   pieces.push(piece('rightWall', [rw], { win: [0.2, 0.36], draw: [0.16, 0.5] }))
 
   const ceil = plane(W, D, lib.plaster(), { y: H, rx: Math.PI / 2 })
-  const cove = lib.emissive('#ffcf96', 3.2)
+  const cove = lib.emissive('#ffcf96', 1.8)
   const coveBack = box(W - 0.6, 0.04, 0.1, cove, { x: 0, y: H - 0.03, z: -D / 2 + 0.28 })
   const coveRight = box(0.1, 0.04, D - 0.8, cove, { x: W / 2 - 0.28, y: H - 0.03, z: 0 })
-  const downMat = lib.emissive('#ffe2b8', 2.4)
+  const downMat = lib.emissive('#ffe2b8', 1.5)
   const downs = []
   for (const x of [-1.6, 0.3, 2.2]) for (const z of [-2.0, 1.4]) downs.push(cyl(0.1, 0.1, 0.02, 20, downMat, { x, y: H - 0.01, z }))
   ;[coveBack, coveRight, ...downs].forEach((m) => (m.castShadow = false))

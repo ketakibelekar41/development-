@@ -3,10 +3,10 @@ import { useProgress } from '../lib/useProgress.js'
 
 const STAGES = [
   { label: 'Sketch', at: 0.0, to: 0.28 },
-  { label: 'Structure', at: 0.4, to: 0.68 },
+  { label: 'Structure', at: 0.76, to: 0.84 },
   { label: 'Interior', at: 0.95, to: 1.01 },
 ]
-const stageOf = (p) => (p < 0.28 ? 0 : p < 0.68 ? 1 : 2)
+const stageOf = (p) => (p < 0.28 ? 0 : p < 0.84 ? 1 : 2)
 
 export default function ProgressRail({ store, onJump }) {
   const fill = useRef(null)

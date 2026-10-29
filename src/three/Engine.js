@@ -368,8 +368,8 @@ export class Engine {
     this.scene.background.copy(PAPER).lerp(NIGHT, smooth(range(p, 0.26, 0.64)))
     this.scene.environmentIntensity = lerp(0.55, 0.22, smooth(range(p, 0.45, 0.95)))
     this.renderer.toneMappingExposure = lerp(1.0, 0.95, smooth(range(p, 0.6, 1)))
-    this.bloom.strength = lit * 0.38
-    this.bloom.threshold = 1.0
+    this.bloom.strength = lit * 0.12
+    this.bloom.threshold = 1.2
 
     // the HUD colour flips with the background so copy stays legible
     this.rig.update(p, this.pointer, this.time, this.look)

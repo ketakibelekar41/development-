@@ -6,7 +6,7 @@ const MATERIALS = ['Travertine', 'Smoked oak', 'Bouclé', 'Brushed brass', 'Hone
 export default function StageInterior({ store, onContact }) {
   const root = useRef(null)
   useProgress(store, (p) => {
-    const o = windowOpacity(p, 0.72, 0.84, 2, 3)
+    const o = windowOpacity(p, 0.84, 0.9, 2, 3)
     const el = root.current
     if (!el) return
     el.style.opacity = o

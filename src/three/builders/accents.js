@@ -49,7 +49,7 @@ export function buildArt(lib) {
 
 export function buildPendants(lib) {
   const brass = lib.brass()
-  const glow = lib.emissive('#ffd9a2', 5)
+  const glow = lib.emissive('#ffd9a2', 2.5)
   const m = []
   const drops = [
     { dx: -0.5, y: 2.0 },

@@ -49,11 +49,11 @@ export class Lighting {
     const lit = smooth(range(p, 0.7, 0.96)) 
     const sunUp = smooth(range(p, 0.55, 0.98))
 
-    this.hemi.intensity = lerp(0, 0.8, clay) * lerp(1, 0.22, lit)
-    this.sun.intensity = lerp(0, 1.3, clay) + lerp(0, 1.5, sunUp)
+    this.hemi.intensity = lerp(0, 0.72, clay) * lerp(1, 0.22, lit)
+    this.sun.intensity = lerp(0, 1.05, clay) + lerp(0, 0.9, sunUp)
     this.sun.color.set('#ffe9cc').lerp(new THREE.Color('#ffd49a'), lit)
-    this.lamp.intensity = lit * 7
-    this.spot.intensity = lit * 38
+    this.lamp.intensity = lit * 4.5
+    this.spot.intensity = lit * 20
     return lit
   }
 

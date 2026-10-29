@@ -33,19 +33,27 @@ export default function Loader({ pct, label, ready, onDone }) {
       role="status"
       aria-live="polite"
     >
-      <svg viewBox="0 0 120 120" className="h-28 w-28" fill="none" stroke="currentColor" strokeWidth="1">
+      <svg
+        viewBox="0 0 120 120"
+        className="h-32 w-32 animate-[loader-float_3s_ease-in-out_infinite]"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        aria-hidden="true"
+      >
         {[
-          'M60 14 L104 38 L104 82 L60 106 L16 82 L16 38 Z',
-          'M60 14 L60 58 M16 38 L60 58 L104 38',
-          'M60 58 L60 106',
-          'M38 26 L82 50 M38 94 L82 70',
+          'M22 34 L48 19 L98 29 L72 44 Z',
+          'M22 34 L72 44 L72 92 L22 80 Z',
+          'M72 44 L98 29 L98 77 L72 92 Z',
         ].map((d, i) => (
           <path
             key={i}
             d={d}
             pathLength="1"
             strokeDasharray="1"
-            style={{ animation: `draw 1.8s ${i * 0.25}s cubic-bezier(.6,0,.2,1) both` }}
+            style={{ animation: `loader-draw 3.6s ${i * 0.35}s cubic-bezier(.55,.05,.25,1) infinite` }}
           />
         ))}
       </svg>
