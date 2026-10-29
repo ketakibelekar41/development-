@@ -2,10 +2,7 @@ import * as THREE from 'three'
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js'
 import { Piece } from '../Piece.js'
 
-/**
- * Geometry cache: identical shapes (e.g. 5 window mullions, 3 pendant domes,
- * 3 sofa cushions) share ONE BufferGeometry -> less GPU memory & upload time.
- */
+
 const gcache = new Map()
 const geo = (key, make) => {
   let g = gcache.get(key)
@@ -31,7 +28,6 @@ function place(m, t = {}) {
 
 export const box = (w, h, d, mat, t) => place(new THREE.Mesh(geo(`b${w},${h},${d}`, () => new THREE.BoxGeometry(w, h, d)), mat), t)
 
-/** Rounded box; the blueprint is drawn with the crisp un-rounded box. */
 export function rbox(w, h, d, r, mat, t) {
   const m = place(new THREE.Mesh(geo(`rb${w},${h},${d},${r}`, () => new RoundedBoxGeometry(w, h, d, 3, r)), mat), t)
   m.userData.sketch = geo(`b${w},${h},${d}`, () => new THREE.BoxGeometry(w, h, d))
@@ -43,7 +39,6 @@ export const cyl = (rt, rb, h, seg, mat, t) =>
 
 export const plane = (w, h, mat, t) => place(new THREE.Mesh(geo(`p${w},${h}`, () => new THREE.PlaneGeometry(w, h)), mat), t)
 
-/** Half-sphere dome (pendant shade). Sketch = a simple cylinder. */
 export function dome(r, mat, t) {
   const m = place(
     new THREE.Mesh(geo(`d${r}`, () => new THREE.SphereGeometry(r, 28, 12, 0, Math.PI * 2, 0, Math.PI / 2)), mat),
@@ -54,7 +49,6 @@ export function dome(r, mat, t) {
   return m
 }
 
-/** Bulb / small sphere. Sketch = tiny box (spheres have no hard edges). */
 export function bulb(r, mat, t) {
   const m = place(new THREE.Mesh(geo(`s${r}`, () => new THREE.SphereGeometry(r, 16, 12)), mat), t)
   m.userData.noLines = true
@@ -72,10 +66,7 @@ export function lathe(points, seg, mat, t, sketchR, sketchH) {
   return m
 }
 
-/**
- * Convenience: wraps meshes in a group (optionally transformed) and a Piece.
- * `at` positions the whole group in the world (used for rotated furniture).
- */
+
 export function piece(name, meshes, opts, at = {}) {
   const g = new THREE.Group()
   g.name = name

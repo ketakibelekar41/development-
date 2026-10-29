@@ -1,13 +1,4 @@
-/**
- * Quality tiers + adaptive quality.
- *
- *  high   : MSAA RT, bloom, 2048 soft shadows, DPR up to 2, 1024 textures
- *  medium : no MSAA/bloom, 1024 shadows, DPR up to 1.5, 512 textures
- *  low    : no shadows, DPR 1, 512 textures
- *
- * The initial tier is guessed from the device; AdaptiveQuality then watches the
- * real frame time and steps down a tier when the experience is not smooth.
- */
+
 export const TIERS = {
   high: { name: 'high', dpr: 2, msaa: 4, bloom: true, shadows: true, shadowMap: 2048, tex: 1024 },
   medium: { name: 'medium', dpr: 1.5, msaa: 0, bloom: false, shadows: true, shadowMap: 1024, tex: 512 },
@@ -34,9 +25,9 @@ export class AdaptiveQuality {
     this.onSlow = onSlow
     this.enabled = true
     this.samples = []
-    this.warmup = 60 // ignore shader-compile / texture-upload hitches
+    this.warmup = 60 
     this.window = 90
-    this.limitMs = 26 // ~38 fps
+    this.limitMs = 26
   }
   reset() {
     this.samples.length = 0

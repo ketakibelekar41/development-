@@ -97,7 +97,7 @@ export function makeModelPiece(key, root, cfg, lib) {
     holder.add(proxy)
   }
 
-  // placement in the room (after proxies, so they move with the holder)
+  
   const at = cfg.at || {}
   holder.position.set(at.x ?? 0, at.y ?? 0, at.z ?? 0)
   holder.rotation.y = at.ry ?? 0

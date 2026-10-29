@@ -2,7 +2,7 @@ import * as THREE from 'three'
 import { createSketchMaterial } from './materials.js'
 import { range, smooth } from './utils/math.js'
 
-const edgeCache = new Map() // sketch geometry -> EdgesGeometry (reused across all instances)
+const edgeCache = new Map()
 function edgesFor(geometry, angle = 25) {
   const key = `${geometry.uuid}:${angle}`
   let e = edgeCache.get(key)
@@ -41,7 +41,7 @@ export class Piece {
     this.wobble = wobble
     this.onUpdate = onUpdate
     this.solids = []
-    this.proxies = [] // sketch-only meshes: draw blueprint lines, never rendered as solids
+    this.proxies = [] 
     this.lines = []
     this.revealMats = []
     this.fadeMats = []
@@ -49,7 +49,6 @@ export class Piece {
     this._cast = false
   }
 
-  /** Call after the group is positioned in the world. */
   init() {
     const g = this.group
     g.updateMatrixWorld(true)
@@ -99,7 +98,6 @@ export class Piece {
 
     ;[...this.solids, ...this.proxies].forEach((mesh) => {
       if (mesh.userData.noLines) return
-      // GLB meshes bring their own traced edge geometry; procedural ones use the cached EdgesGeometry
       const eg = mesh.userData.sketchEdges || edgesFor(mesh.userData.sketch || mesh.geometry, mesh.userData.edgeAngle || 25)
       const ls = new THREE.LineSegments(eg, this.sketchMat)
       if (eg.userData.needsDistances) {

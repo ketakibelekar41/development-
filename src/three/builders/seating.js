@@ -1,6 +1,5 @@
 import { box, rbox, cyl, piece } from './helpers.js'
 
-/** 3-seat bouclé sofa on brass legs, with two linen pillows, against the feature wall. */
 export function buildSofa(lib) {
   const cx = 0.3
   const cz = -2.4
@@ -24,7 +23,6 @@ export function buildSofa(lib) {
   return piece('sofa', m, { win: [0.44, 0.58], draw: [0.45, 0.78] })
 }
 
-/** Rug: thin box, striped woven texture. */
 export function buildRug(lib) {
   return piece('rug', [box(4.2, 0.02, 3.0, lib.fabric('rug'), { x: 0.3, y: 0.011, z: -0.9 })], {
     win: [0.42, 0.52],
@@ -34,7 +32,6 @@ export function buildRug(lib) {
   })
 }
 
-/** Caramel bouclé armchair with walnut legs, rotated towards the coffee table. */
 export function buildArmchair(lib) {
   const fab = lib.fabric('caramel')
   const wood = lib.walnut()

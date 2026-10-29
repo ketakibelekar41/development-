@@ -2,11 +2,9 @@ import * as THREE from 'three'
 import { box, cyl, dome, bulb, piece } from './helpers.js'
 import { ROOM } from './shell.js'
 
-/** Where the practical lights live (Lighting.js reads these). */
 export const LAMP = { x: -1.95, z: -2.35, shadeY: 1.55 }
 export const PENDANT = { x: 0.3, z: -0.7 }
 
-/** Brass floor lamp with a glowing drum shade. */
 export function buildFloorLamp(lib) {
   const brass = lib.brass()
   const shade = lib.emissive('#ffc98c', 0.9)
@@ -19,7 +17,6 @@ export function buildFloorLamp(lib) {
   return piece('floorLamp', m, { win: [0.6, 0.7], draw: [0.6, 0.88] })
 }
 
-/** Rubber-fig-ish plant: low-poly blades in a ceramic pot. */
 export function buildPlant(lib) {
   const px = -3.25
   const pz = 0.95
@@ -43,7 +40,6 @@ export function buildPlant(lib) {
   return piece('plant', m, { win: [0.62, 0.72], draw: [0.62, 0.9] })
 }
 
-/** Abstract painting in a thin brass frame above the sofa. */
 export function buildArt(lib) {
   const frame = box(1.76, 1.11, 0.05, lib.brass(), { x: 0.3, y: 1.85, z: -2.895 })
   const canvas = box(1.6, 0.96, 0.02, lib.painting(), { x: 0.3, y: 1.85, z: -2.862 })
@@ -51,7 +47,6 @@ export function buildArt(lib) {
   return piece('art', [frame, canvas], { win: [0.64, 0.73], draw: [0.62, 0.9] })
 }
 
-/** Three brass dome pendants over the coffee table, bulbs glow when "lit". */
 export function buildPendants(lib) {
   const brass = lib.brass()
   const glow = lib.emissive('#ffd9a2', 5)

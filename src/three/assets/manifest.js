@@ -1,26 +1,4 @@
-/**
- * GLB manifest — the single place that decides which pieces come from files.
- *
- *  enabled : true  -> load `url`; if the file is missing/corrupt the engine
- *                     silently falls back to the procedural version of that piece.
- *  fit     : uniform-scale the model so ONE dimension matches (metres):
- *            { width } | { height } | { depth }   (so any Blender export fits)
- *  at      : world placement of the model's footprint centre / floor contact
- *  win     : scroll window in which the solid is revealed
- *  draw    : intro window in which its blueprint is drawn
- *
- * Model requirements: Y-up, metres, FRONT FACING +Z, origin anywhere
- * (the loader re-centres it on the floor).
- *
- * Blueprint (the pen drawing before the solid appears) — by default it is
- * traced from the REAL edges of your mesh, however dense. Optional per model:
- *   sketchAngle  : crease angle in degrees (default 35; lower = more lines)
- *   sketchBudget : max line segments for the whole model (default 6000)
- *   sketch: 'box': force the old bounding-box cage
- * Advanced: a mesh named `SKETCH_<anything>` inside the GLB overrides all of
- * this (its edges are drawn, it is never rendered as a solid). Delete such
- * meshes from your file if you want the real outline instead.
- */
+
 const BASE = import.meta.env.BASE_URL
 
 export const MODELS = {

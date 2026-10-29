@@ -1,18 +1,10 @@
 import * as THREE from 'three'
 import { box, plane, cyl, piece } from './helpers.js'
 
-/** Room dimensions in metres. Origin = floor centre. */
 export const ROOM = { W: 8, D: 6, H: 3.2, T: 0.2 }
 export const WINDOW = { z0: -2.4, z1: 1.8, top: 3.0 }
 
-/**
- * The architectural shell: floor slab, back wall, window wall, right wall,
- * ceiling (+ cove light + downlights) and the travertine feature wall.
- *
- * Right wall / ceiling are single-sided planes facing INTO the room. From the
- * outside they are back-face culled, which gives us the "architectural
- * cut-away" for free: the aerial camera sees straight into the room.
- */
+
 export function buildShell(lib) {
   const { W, D, H, T } = ROOM
   const pieces = []
@@ -56,7 +48,6 @@ export function buildShell(lib) {
   ceil.userData.cast = true
   pieces.push(piece('ceiling', [ceil, coveBack, coveRight, ...downs], { win: [0.3, 0.5], dir: [-1, 0, 0], draw: [0.22, 0.55] }))
 
-  // Feature wall behind the sofa
   pieces.push(
     piece('featureWall', [box(4.4, 2.95, 0.08, lib.travertine(), { x: 0.3, y: 1.475, z: -D / 2 + 0.04 })], {
       win: [0.36, 0.5],
@@ -67,7 +58,6 @@ export function buildShell(lib) {
   return pieces
 }
 
-/** Ground "paper" grid + corner marks; pure shader, drawn under the slab. */
 export class BlueprintGrid {
   constructor() {
     this.uniforms = {

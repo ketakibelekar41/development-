@@ -26,16 +26,7 @@ const PAPER = new THREE.Color('#e4ddcd')
 const NIGHT = new THREE.Color('#171310')
 const INTRO_SECONDS = 5.5
 
-/**
- * Engine = renderer + scene + post stack + main loop.
- *
- *   store (damped scroll) ─┐
- *   pointer ───────────────┼─> update() ─> pieces / lighting / camera ─> composer
- *   intro timeline ────────┘
- *
- * Rendering is on-demand: when nothing changes (scroll settled, pointer idle,
- * intro finished) no frame is rendered, so an idle page costs ~0 GPU.
- */
+
 export class Engine {
   constructor(container, store, { onProgress, onTier } = {}) {
     this.container = container
@@ -69,7 +60,6 @@ export class Engine {
     return TIERS[this.tierName]
   }
 
-  /* ------------------------------------------------------------ init */
   async init() {
     const tier = this.tier
     const progress = (v, label) => !this.disposed && this.onProgress?.(v, label)
@@ -81,7 +71,7 @@ export class Engine {
 
     const renderer = new THREE.WebGLRenderer({
       canvas,
-      antialias: false, // MSAA lives on the composer render target
+      antialias: false, 
       powerPreference: 'high-performance',
       stencil: false,
     })
@@ -89,7 +79,7 @@ export class Engine {
     renderer.toneMappingExposure = 1.0
     renderer.shadowMap.enabled = true
     renderer.shadowMap.type = THREE.PCFShadowMap
-    renderer.shadowMap.autoUpdate = false // static casters -> re-render the map only on change
+    renderer.shadowMap.autoUpdate = false 
     this.renderer = renderer
 
     this.scene = new THREE.Scene()
@@ -97,7 +87,7 @@ export class Engine {
     this.camera = new THREE.PerspectiveCamera(34, 1.78, 0.1, 80)
     this.rig = new CameraRig(this.camera)
 
-    // --- environment (IBL) ---------------------------------------------
+    
     progress(0.02, 'Preparing light probes')
     const pmrem = new THREE.PMREMGenerator(renderer)
     const envScene = new RoomEnvironment()
@@ -108,7 +98,6 @@ export class Engine {
     })
     pmrem.dispose()
 
-    // --- textures (async, chunked) --------------------------------------
     this.tex = await createTextures({
       size: tier.tex,
       isCancelled: () => this.disposed,
@@ -117,7 +106,6 @@ export class Engine {
     if (this.disposed) return
     configureTextures(this.tex, renderer)
 
-    // --- GLB models (optional; each falls back to its procedural twin) ---
     progress(0.6, 'Loading models')
     const models = await loadModels(renderer, MODELS, {
       onProgress: (v) => progress(0.6 + v * 0.1, 'Loading models'),
@@ -127,7 +115,7 @@ export class Engine {
     Object.values(models).forEach((m) => preloadTextures(m, renderer))
     this.modelKeys = Object.keys(models)
 
-    // --- scene ---------------------------------------------------------
+   
     progress(0.72, 'Assembling the studio model')
     await new Promise((r) => setTimeout(r, 0))
     const lib = createMaterialLibrary(this.tex)
@@ -155,13 +143,13 @@ export class Engine {
     })
     this.lighting = new Lighting(this.scene)
 
-    // --- post ----------------------------------------------------------
+   
     this._buildComposer()
     this.applyTier(this.tierName, false)
     this.resize()
     this._bind()
 
-    // --- shader warm-up: compile every program before the first frame ---
+    
     progress(0.8, 'Compiling shaders')
     const vis = this.pieces.map((pc) => pc.solids.map((s) => s.visible))
     this.pieces.forEach((pc) => {
@@ -201,7 +189,6 @@ export class Engine {
     this.composer.addPass(new OutputPass())
   }
 
-  /* ------------------------------------------------------------ quality */
   applyTier(name, notify = true) {
     this.tierName = name
     const t = TIERS[name]
@@ -259,13 +246,13 @@ export class Engine {
       stage.style.cursor = this._canDrag ? 'grab' : ''
     }
     this._onDbl = () => {
-      this.look.tyaw = this.look.tpitch = 0 // double-click = recentre the view
+      this.look.tyaw = this.look.tpitch = 0 
       this._dirty = true
     }
     this._onMove = (e) => {
       const L = this.look
       if (L.dragging) {
-        L.tyaw = clamp(L.tyaw + (e.clientX - L.lx) * 0.0045, -1.0, 0.5) // limits keep the open front of the room out of view
+        L.tyaw = clamp(L.tyaw + (e.clientX - L.lx) * 0.0045, -1.0, 0.5) 
         L.tpitch = clamp(L.tpitch + (e.clientY - L.ly) * 0.0035, -0.5, 0.5)
         L.lx = e.clientX
         L.ly = e.clientY
@@ -310,7 +297,6 @@ export class Engine {
     this.introRunning = true
   }
 
-  /* ------------------------------------------------------------ frame */
   _loop = (now) => {
     if (this.disposed) return
     this._raf = requestAnimationFrame(this._loop)
@@ -327,7 +313,6 @@ export class Engine {
     this.pointer.y += py * k
     const pointerMoving = Math.abs(px) > 5e-4 || Math.abs(py) > 5e-4
 
-    // drag-to-look: ease towards the target; drift back to centre while scrolling
     const L = this.look
     if (!L.dragging && moved) {
       const back = 1 - Math.exp(-2.5 * dt)
@@ -376,12 +361,10 @@ export class Engine {
     this.grid.update(p, intro)
     const lit = this.lighting.update(p)
 
-    // globals shared by every material
     SHARED.uPBR.value = smooth(range(p, 0.6, 0.86))
     SHARED.uLit.value = lit
     SKETCH_SHARED.uSketchy.value = 1 - smooth(range(p, 0.02, 0.3))
 
-    // look: paper -> warm night, exposure + IBL + bloom
     this.scene.background.copy(PAPER).lerp(NIGHT, smooth(range(p, 0.26, 0.64)))
     this.scene.environmentIntensity = lerp(0.55, 0.22, smooth(range(p, 0.45, 0.95)))
     this.renderer.toneMappingExposure = lerp(1.0, 0.95, smooth(range(p, 0.6, 1)))
@@ -392,7 +375,6 @@ export class Engine {
     this.rig.update(p, this.pointer, this.time, this.look)
   }
 
-  /* ------------------------------------------------------------ teardown */
   dispose() {
     this.disposed = true
     cancelAnimationFrame(this._raf)

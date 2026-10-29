@@ -3,20 +3,7 @@ import { LAMP, PENDANT } from './builders/accents.js'
 import { ROOM } from './builders/shell.js'
 import { lerp, range, smooth } from './utils/math.js'
 
-/**
- * Lighting rig (4 real lights + image-based lighting):
- *   - Sun         : warm directional light through the window, the only shadow
- *                   caster (static shadow map, re-rendered only when casters change)
- *   - Hemisphere  : very low sky/ground bounce
- *   - Lamp        : warm point light at the floor lamp
- *   - Spot        : warm accent spot over the coffee table
- * Environment (PMREM RoomEnvironment) supplies reflections on glass, brass,
- * marble and the lacquered floor.
- *
- * Everything is a function of scroll progress: the model is lit softly in
- * "clay" mode, then the sun, practical lights and cove lights come up in
- * Stage 3.
- */
+
 export class Lighting {
   constructor(scene) {
     this.hemi = new THREE.HemisphereLight('#fff1e0', '#8a7664', 0)
@@ -58,8 +45,8 @@ export class Lighting {
 
   /** @returns lit factor 0..1 (used by the post pipeline / materials) */
   update(p) {
-    const clay = smooth(range(p, 0.28, 0.5)) // soft model lighting appears with the solids
-    const lit = smooth(range(p, 0.7, 0.96)) // practicals + cove come on
+    const clay = smooth(range(p, 0.28, 0.5)) 
+    const lit = smooth(range(p, 0.7, 0.96)) 
     const sunUp = smooth(range(p, 0.55, 0.98))
 
     this.hemi.intensity = lerp(0, 0.8, clay) * lerp(1, 0.22, lit)

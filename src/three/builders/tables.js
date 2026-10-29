@@ -1,6 +1,5 @@
 import { box, cyl, lathe, piece } from './helpers.js'
 
-/** Marble-top coffee table on a travertine pedestal, with books + vase. */
 export function buildCoffeeTable(lib) {
   const m = []
   m.push(cyl(0.55, 0.55, 0.05, 56, lib.marble(), { x: 0.3, y: 0.425, z: -0.7 }))
@@ -31,7 +30,6 @@ export function buildCoffeeTable(lib) {
   return piece('coffeeTable', m, { win: [0.5, 0.62], draw: [0.5, 0.82] })
 }
 
-/** Floating walnut shelves on the right of the back wall, with books and objects. */
 export function buildShelf(lib) {
   const wood = lib.walnut()
   const m = []

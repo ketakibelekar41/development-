@@ -3,11 +3,7 @@ import { box, plane, piece } from './helpers.js'
 import { ROOM, WINDOW } from './shell.js'
 import { range, smooth } from '../utils/math.js'
 
-/**
- * Glazing: low-cost "glass" (transparent PBR with strong env reflections – no
- * transmission pass), slim dark-metal mullions that cast the window shadows
- * across the floor, and a painted sky backdrop seen through the opening.
- */
+
 export function buildWindow(lib, tex) {
   const { W } = ROOM
   const { z0, z1, top } = WINDOW

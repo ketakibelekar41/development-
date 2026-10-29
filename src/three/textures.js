@@ -1,15 +1,5 @@
 import * as THREE from 'three'
 
-/**
- * Procedural, tileable PBR textures generated once on the CPU into canvases.
- * No network assets are required. Everything is seamless (periodic value
- * noise), so a 1024px tile can cover a whole floor with RepeatWrapping.
- *
- * In a production pipeline these would be KTX2/Basis files; the material
- * library only depends on THREE.Texture so they can be swapped 1:1.
- */
-
-/* ---------------- periodic value noise ---------------- */
 function hash2(x, y, s) {
   let h = Math.imul(x | 0, 374761393) + Math.imul(y | 0, 668265263) + Math.imul(s | 0, 1274126177)
   h = Math.imul(h ^ (h >>> 13), 1274126177)
@@ -32,7 +22,6 @@ function vnoise(x, y, s, px, py) {
   const d = hash2(x1, y1, s)
   return a + (b - a) * u + (c - a) * v + (a - b - c + d) * u * v
 }
-/** fbm on (u,v) in 0..1 that tiles with integer base frequencies px,py */
 function fbm(u, v, px, py, seed = 0, oct = 4) {
   let sum = 0
   let amp = 0.5
@@ -45,7 +34,6 @@ function fbm(u, v, px, py, seed = 0, oct = 4) {
   return sum
 }
 
-/* ---------------- canvas helpers ---------------- */
 function bake(size, w, h, pixel) {
   const canvas = document.createElement('canvas')
   canvas.width = w ?? size
@@ -85,7 +73,6 @@ const hexToRgb = (hex) => {
   return [c.r * 255, c.g * 255, c.b * 255]
 }
 
-/* ---------------- generators ---------------- */
 function genOak(S) {
   const rows = 8
   return bake(S, S, S, (u, v, x, y, out) => {
@@ -262,17 +249,12 @@ function genArt() {
   return c
 }
 
-/* ---------------- public API ---------------- */
 const nextFrame = () => new Promise((r) => setTimeout(r, 0))
 
-/**
- * Generates every texture, reporting progress so the loader can display it.
- * Work is chunked with a macrotask yield between textures so the loader stays
- * animated.
- */
+
 export async function createTextures({ size, onStep, isCancelled }) {
   const S = size
-  const F = 512 // fabric / plaster detail is high-frequency: 512 is plenty
+  const F = 512 
   const tex = {}
   const jobs = [
     ['oakFloor', 'Laying oak floor', () => toTexture(genOak(S), { repeat: [5, 3.75] })],
@@ -302,7 +284,7 @@ export function configureTextures(tex, renderer) {
   const aniso = Math.min(8, renderer.capabilities.getMaxAnisotropy())
   Object.values(tex).forEach((t) => {
     t.anisotropy = aniso
-    renderer.initTexture(t) // upload to GPU now (preload) -> no hitch during scroll
+    renderer.initTexture(t) 
   })
 }
 

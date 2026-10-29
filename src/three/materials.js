@@ -1,37 +1,20 @@
 import * as THREE from 'three'
 
-/**
- * Material system
- * ---------------
- * 1. makeRevealable(material): patches a stock PBR material (onBeforeCompile) so
- *    it can
- *      - dissolve / assemble along a direction with 3D noise + a glowing front
- *        (uReveal 0..1, per-piece uniforms)
- *      - blend from a neutral "clay" architectural-model look to its full PBR
- *        look (uPBR, shared by every material)
- *      - gate its emissive output with a shared "lights on" factor (uLit)
- *    All of the lighting, shadow and tone-mapping code of MeshStandard/Physical
- *    is retained – we only splice a few lines into the stock shader chunks.
- *
- * 2. createSketchMaterial(): the hand-drawn blueprint line shader.
- */
 
-/** Uniforms shared by every patched material (one write per frame). */
 export const SHARED = {
   uPBR: { value: 0 },
   uLit: { value: 0 },
 }
 
-/** Uniforms shared by every sketch (line) material. */
 export const SKETCH_SHARED = {
   uInk: { value: new THREE.Color('#2a2622') },
   uAccent: { value: new THREE.Color('#c4572e') },
   uSketchy: { value: 1 },
-  uPointer: { value: new THREE.Vector2(-9999, -9999) }, // CSS px, y from bottom
+  uPointer: { value: new THREE.Vector2(-9999, -9999) }, 
   uPixelRatio: { value: 1 },
 }
 
-const NOISE_GLSL = /* glsl */ `
+const NOISE_GLSL =  `
 float rvHash(vec3 p){ p = fract(p * 0.3183099 + 0.1); p *= 17.0; return fract(p.x * p.y * p.z * (p.x + p.y + p.z)); }
 float rvNoise(vec3 x){
   vec3 i = floor(x); vec3 f = fract(x); f = f * f * (3.0 - 2.0 * f);
@@ -110,11 +93,7 @@ totalEmissiveRadiance += uGlow * rvEdge * 1.6;`,
   return material
 }
 
-/**
- * Sketch (blueprint) line material. Draws a pen-like sweep along the piece's
- * reveal axis, wobbles vertices like a hand drawing, dashes "construction"
- * lines and brightens ink near the pointer.
- */
+
 export function createSketchMaterial({ dash = false, wobble = 1 } = {}) {
   return new THREE.ShaderMaterial({
     uniforms: {
@@ -129,7 +108,7 @@ export function createSketchMaterial({ dash = false, wobble = 1 } = {}) {
     },
     transparent: true,
     depthWrite: false,
-    vertexShader: /* glsl */ `
+    vertexShader:  `
       attribute float lineDistance;
       uniform float uSketchy; uniform float uWobble; uniform vec3 uOrigin; uniform vec3 uDir; uniform float uLen;
       varying float vT; varying float vLD;
@@ -145,7 +124,7 @@ export function createSketchMaterial({ dash = false, wobble = 1 } = {}) {
         clip.z -= 0.0006 * clip.w;                          // pull lines slightly towards camera (no z-fight with solids)
         gl_Position = clip;
       }`,
-    fragmentShader: /* glsl */ `
+    fragmentShader: `
       uniform vec3 uInk; uniform vec3 uAccent;
       uniform float uDraw; uniform float uFade; uniform float uDash;
       uniform vec2 uPointer; uniform float uPixelRatio;
@@ -163,11 +142,7 @@ export function createSketchMaterial({ dash = false, wobble = 1 } = {}) {
   })
 }
 
-/* ------------------------------------------------------------------ */
-/* Material library: every call returns a NEW instance (uniform sets   */
-/* are per-piece) but all instances share the same textures + shader    */
-/* program, so the GPU cost is one program per material type.           */
-/* ------------------------------------------------------------------ */
+
 export function createMaterialLibrary(tex) {
   const std = (p, o) => makeRevealable(new THREE.MeshStandardMaterial(p), o)
   const phys = (p, o) => makeRevealable(new THREE.MeshPhysicalMaterial(p), o)

@@ -1,15 +1,7 @@
 import * as THREE from 'three'
 import { clamp, lerp, range, smooth } from './utils/math.js'
 
-/**
- * Cinematic camera, a pure function of scroll progress.
- *
- * Position and look-at target travel along two Catmull-Rom splines:
- *   aerial 3/4 cut-away  ->  descend towards the room  ->  glide in through the
- *   open front  ->  eye-level hero composition.
- * A gentle dolly-zoom (FOV 34 -> 27) tightens the final frame; pointer parallax
- * and a micro "breathing" sway keep it alive.
- */
+
 const POS = [
   [8.6, 7.4, 10.8],
   [7.0, 5.2, 8.8],
@@ -50,10 +42,10 @@ export class CameraRig {
     this.pos.getPoint(t, this._p)
     this.look.getPoint(t, this._l)
 
-    // drag-to-look: rotate the view direction around the camera position
+    
     this._lk.copy(this._l)
     if (look && (look.yaw || look.pitch)) {
-      const enable = smooth(range(t, 0.5, 0.62)) // only active in the interior stage
+      const enable = smooth(range(t, 0.5, 0.62))
       this._d.copy(this._l).sub(this._p)
       const len = this._d.length()
       this._d.normalize().applyAxisAngle(THREE.Object3D.DEFAULT_UP, look.yaw * enable)
@@ -62,7 +54,6 @@ export class CameraRig {
       this._lk.copy(this._p).addScaledVector(this._d, len)
     }
 
-    // dolly-zoom + responsive FOV (keep >= ~58deg horizontal on portrait screens)
     const base = lerp(34, 27, smooth(range(t, 0.55, 1)))
     const hfovMin = THREE.MathUtils.degToRad(52)
     const vfovForWidth = THREE.MathUtils.radToDeg(2 * Math.atan(Math.tan(hfovMin / 2) / this.aspect))
@@ -72,7 +63,6 @@ export class CameraRig {
       this.camera.updateProjectionMatrix()
     }
 
-    // pointer parallax: strongest at the end, light while it is a drawing
     const amt = lerp(0.18, 0.42, smooth(range(t, 0.3, 1)))
     this.camera.position.copy(this._p)
     this.camera.lookAt(this._lk)
