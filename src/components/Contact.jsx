@@ -1,4 +1,3 @@
-/** Section: closing content after the scroll film — a normal, static page section. */
 export default function Contact() {
   return (
     <section id="contact" className="relative z-10 bg-[#171310] px-6 py-32 text-[#f4ece0] md:px-12">

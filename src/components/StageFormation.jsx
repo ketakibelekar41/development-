@@ -1,7 +1,6 @@
 import { useRef } from 'react'
 import { useProgress, windowOpacity } from '../lib/useProgress.js'
 
-/** Section 02 — Structure. Appears while walls, ceiling and furniture assemble. */
 export default function StageFormation({ store }) {
   const root = useRef(null)
   const bar = useRef(null)

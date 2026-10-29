@@ -1,9 +1,4 @@
-/**
- * Generates starter GLBs from the procedural pieces:
- *   npm run build && npm run preview &      (serves :4173)
- *   node tools/export-models.mjs sofa armchair coffeeTable floorLamp
- * Output: public/models/<name>.glb  (then: npm run models:optimize)
- */
+
 import { chromium } from 'playwright'
 import { writeFileSync, mkdirSync } from 'node:fs'
 

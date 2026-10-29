@@ -1,7 +1,6 @@
 import { useRef } from 'react'
 import { useProgress } from '../lib/useProgress.js'
 
-/** Section: "drag to look around" cue; fades in once the interior is reached. */
 export default function DragHint({ store }) {
   const root = useRef(null)
   useProgress(store, (p) => {

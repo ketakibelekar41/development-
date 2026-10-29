@@ -1,15 +1,9 @@
 import { useEffect, useState } from 'react'
 
-/**
- * Section: preloader. A blueprint cube draws itself while the engine builds
- * textures, uploads them to the GPU and compiles every shader program.
- * The percentage is real progress reported by the Engine.
- */
 export default function Loader({ pct, label, ready, onDone }) {
   const [shown, setShown] = useState(0)
   const [leaving, setLeaving] = useState(false)
 
-  // ease the displayed number towards the real value
   useEffect(() => {
     let raf
     const tick = () => {

@@ -1,11 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { Engine } from '../three/Engine.js'
 
-/**
- * Section: the WebGL stage. Owns the Engine lifecycle (create on mount,
- * dispose on unmount). The canvas element is created by the engine itself so
- * React StrictMode's mount/unmount/mount cycle never reuses a lost context.
- */
+
 export default function Experience({ store, engineRef, onProgress, onReady, onTier }) {
   const host = useRef(null)
   const cb = useRef({ onProgress, onReady, onTier })
@@ -18,8 +14,8 @@ export default function Experience({ store, engineRef, onProgress, onReady, onTi
     })
     engineRef.current = engine
     if (new URLSearchParams(location.search).has('debug')) {
-      window.__engine = engine // dev: inspect renderer.info
-      import('../dev/exportGLB.js').then((m) => m.install(engine)) // dev: window.__exportGLB(name)
+      window.__engine = engine 
+      import('../dev/exportGLB.js').then((m) => m.install(engine)) 
     }
     cb.current.onTier?.(engine.tierName, engine.mode)
     engine

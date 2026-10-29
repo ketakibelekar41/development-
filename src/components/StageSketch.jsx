@@ -1,7 +1,6 @@
 import { useRef } from 'react'
 import { useProgress, windowOpacity } from '../lib/useProgress.js'
 
-/** Section 01 — Concept. Visible on load, dissolves as the structure forms. */
 export default function StageSketch({ store }) {
   const root = useRef(null)
   useProgress(store, (p) => {

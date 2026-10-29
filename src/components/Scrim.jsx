@@ -1,11 +1,7 @@
 import { useRef } from 'react'
 import { useProgress } from '../lib/useProgress.js'
 
-/**
- * Section: cinematic scrim. A soft bottom-left shadow that fades in with the
- * interior stage so ivory copy stays legible over the bright render, plus a
- * subtle vignette for depth. Pure CSS, no per-frame cost beyond one opacity.
- */
+
 export default function Scrim({ store }) {
   const root = useRef(null)
   useProgress(store, (p) => {

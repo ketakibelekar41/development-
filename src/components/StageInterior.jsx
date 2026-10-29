@@ -3,7 +3,6 @@ import { useProgress, windowOpacity } from '../lib/useProgress.js'
 
 const MATERIALS = ['Travertine', 'Smoked oak', 'Bouclé', 'Brushed brass', 'Honed marble']
 
-/** Section 03 — Interior. Material palette fades in as the room is lit. */
 export default function StageInterior({ store, onContact }) {
   const root = useRef(null)
   useProgress(store, (p) => {

@@ -1,7 +1,6 @@
 import { useRef } from 'react'
 import { useProgress } from '../lib/useProgress.js'
 
-/** Section: "scroll" cue, bottom centre; fades away once the user starts. */
 export default function ScrollHint({ store, visible }) {
   const root = useRef(null)
   useProgress(store, (p) => {

@@ -1,9 +1,6 @@
 const MODES = ['auto', 'high', 'medium', 'low']
 
-/**
- * Section: quality switcher (bottom-right). "auto" lets AdaptiveQuality step the
- * tier down if the frame time degrades; the others pin a tier.
- */
+
 export default function QualityToggle({ tier, onChange }) {
   return (
     <div className="absolute bottom-6 right-6 z-20 flex items-center gap-3 text-[10px] uppercase tracking-[0.22em] md:right-12">

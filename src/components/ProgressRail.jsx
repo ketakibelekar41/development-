@@ -8,14 +8,13 @@ const STAGES = [
 ]
 const stageOf = (p) => (p < 0.28 ? 0 : p < 0.68 ? 1 : 2)
 
-/** Section: vertical stage rail (right edge). Clicking a stage scrolls to it. */
 export default function ProgressRail({ store, onJump }) {
   const fill = useRef(null)
   const [active, setActive] = useState(0)
   useProgress(store, (p) => {
     if (fill.current) fill.current.style.transform = `scaleY(${p})`
     const s = stageOf(p)
-    setActive((prev) => (prev === s ? prev : s)) // re-renders only when the stage changes
+    setActive((prev) => (prev === s ? prev : s)) 
   })
   return (
     <aside className="absolute right-6 top-1/2 z-20 hidden -translate-y-1/2 items-center gap-5 md:right-12 md:flex">

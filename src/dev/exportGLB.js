@@ -1,13 +1,7 @@
 import * as THREE from 'three'
 import { GLTFExporter } from 'three/addons/exporters/GLTFExporter.js'
 
-/**
- * DEV ONLY (loaded with ?debug): exports any procedural piece as a GLB so you
- * get a ready-made asset to open in Blender, replace, or compress.
- *   window.__exportGLB('sofa')  ->  base64 string of the .glb
- * Bump maps are baked to normal maps (glTF has no bump channel) so the fabric
- * relief survives the round trip.
- */
+
 function heightToNormal(tex, strength = 2.4) {
   const img = tex.image
   const w = img.width
@@ -30,7 +24,7 @@ function heightToNormal(tex, strength = 2.4) {
       const l = Math.hypot(dx, dy, 1)
       const i = (y * w + x) * 4
       out.data[i] = ((-dx / l) * 0.5 + 0.5) * 255
-      out.data[i + 1] = ((dy / l) * 0.5 + 0.5) * 255 // glTF is +Y up; canvas rows go down
+      out.data[i + 1] = ((dy / l) * 0.5 + 0.5) * 255 
       out.data[i + 2] = ((1 / l) * 0.5 + 0.5) * 255
       out.data[i + 3] = 255
     }
@@ -56,14 +50,13 @@ export function install(engine) {
     clone.traverse((o) => o.isLine && lines.push(o))
     lines.forEach((o) => o.parent.remove(o))
 
-    // Blueprint proxies: one `SKETCH_n` mesh per solid (crisp cage if the solid is
-    // rounded). The runtime draws their edges as the sketch and never renders them.
+   
     const proxyMat = new THREE.MeshBasicMaterial({ name: 'sketch-proxy' })
     const proxies = []
     let mi = 0
     clone.traverse((o) => {
       if (!o.isMesh) return
-      const src = orig[mi++] // clone() JSON-copies userData, so read the real flags/geometry from the original
+      const src = orig[mi++]
       if (src.userData.noLines) return
       const p = new THREE.Mesh(src.userData.sketch || src.geometry, proxyMat)
       p.name = `SKETCH_${proxies.length}`
@@ -77,7 +70,7 @@ export function install(engine) {
     const cache = new Map()
     clone.traverse((o) => {
       o.visible = true
-      o.userData = {} // internal engine flags must not leak into the file
+      o.userData = {} 
       if (!o.isMesh || o.name.startsWith('SKETCH_')) return
       const m = o.material
       if (!cache.has(m)) {

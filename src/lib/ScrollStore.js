@@ -1,13 +1,4 @@
-/**
- * Single source of truth for scroll progress (0..1).
- *
- *  - `target` is the raw, native scroll position (written by the ScrollTrack).
- *  - `value`  is the damped value that the 3D scene AND the HTML overlays read,
- *    so canvas and DOM always stay perfectly in sync.
- *
- * Native scrolling is kept (a11y, touch, keyboard, scrollbar) and smoothed with
- * frame-rate independent exponential damping — fully reversible, no timelines.
- */
+
 export class ScrollStore {
   constructor() {
     this.target = 0
